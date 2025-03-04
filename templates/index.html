@@ -77,6 +77,9 @@
         <input type="file" id="resume" accept=".pdf">
         <button onclick="uploadResume()">Upload Resume</button>
 
+        <!-- ✅ Message Display Section -->
+        <div id="uploadMessage" style="margin-top: 10px; font-weight: bold;"></div>
+
         <div class="buttons">
             <button onclick="getResponse('about_resume')">📄 Resume Evaluation</button>
             <button onclick="getResponse('keywords')">🔑 Missing Keywords</button>
@@ -95,7 +98,19 @@
 
             fetch("/upload", { method: "POST", body: formData })
                 .then(response => response.json())
-                .then(data => alert(data.message || data.error));
+                .then(data => {
+                    let messageDiv = document.getElementById("uploadMessage");
+
+                    if (data.message) {
+                        // ✅ Show success message in green
+                        messageDiv.innerHTML = "✅ " + data.message;
+                        messageDiv.style.color = "green";
+                    } else {
+                        // ❌ Show error message in red
+                        messageDiv.innerHTML = "❌ " + data.error;
+                        messageDiv.style.color = "red";
+                    }
+                });
         }
 
         function getResponse(endpoint) {
