@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 from langchain.prompts import ChatPromptTemplate
+from langchain_google_genai import GoogleGenerativeAI
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_community.vectorstores import Chroma
@@ -21,10 +22,7 @@ os.environ["GOOGLE_API_KEY"]
 db = None
 
 # Initialize LLM model
-llm = ChatGroq(
-    groq_api_key=groq_api_key,
-    model_name="llama-3.3-70b-versatile"
-)
+model = GoogleGenerativeAI(model="gemini-2.0-flash")
 
 # Define prompts
 prompt1 = ChatPromptTemplate.from_template("""
@@ -128,7 +126,7 @@ def extract_all_data(uploaded_file):
 
 
 def get_response(description, db, prompt):  
-    document_chain = create_stuff_documents_chain(llm, prompt)
+    document_chain = create_stuff_documents_chain(model, prompt)
     retriever = db.as_retriever()
     retrieval_chain = create_retrieval_chain(retriever, document_chain)
 
