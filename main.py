@@ -2,8 +2,8 @@ from flask import Flask, render_template, request, jsonify
 import os
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
-from langchain.prompts import ChatPromptTemplate
 from langchain_google_genai import GoogleGenerativeAI
+from langchain.prompts import ChatPromptTemplate
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_community.vectorstores import Chroma
@@ -22,7 +22,7 @@ os.environ["GOOGLE_API_KEY"]
 db = None
 
 # Initialize LLM model
-model = GoogleGenerativeAI(model="gemini-2.0-flash")
+model=GoogleGenerativeAI(model="gemini-2.0-flash")
 
 # Define prompts
 prompt1 = ChatPromptTemplate.from_template("""
@@ -42,10 +42,14 @@ Your task is to **evaluate** the provided resume against the job description.
 {context}
 
 ### **Response Format**:
-✅ **Overall Match Assessment**: (Provide a summary of alignment)  
-🔹 **Key Strengths**: (List relevant skills, experience, and achievements)  
-⚠️ **Areas for Improvement**: (Mention missing qualifications or weak points)  
-📌 **Final Verdict**: (Would you recommend this candidate for the role? Why or why not?)
+✅ <b>Overall Match Assessment</b>: 
+    (Provide a summary of alignment)  
+🔹 <b>Key Strengths</b>: 
+    (List relevant skills, experience, and achievements)
+⚠️ <b>Areas for Improvement</b>: 
+    (Mention missing qualifications or weak points)  
+📌 <b>Final Verdict</b>:
+    (Would you recommend this candidate for the role? Why or why not?)
 """)
 
 
@@ -88,12 +92,11 @@ You are an **Applicant Tracking System (ATS) scanner** that calculates **resume-
 {context}
 
 ### **Response Format**:
-📊 **Match Percentage**: (Dynamically calculated value, not static)  
-
-❌ **Missing Keywords**:  
+📊 <b>Match Percentage</b>: 
+    (Dynamically calculated value, not static)  
+❌ <b>Missing Keywords</b>:  
    - (List of essential keywords missing from the resume)  
-
-📌 **Final Recommendations**:  
+📌 <b>Final Recommendations</b>:  
    - (Suggestions for improving the match score)
 """)
 
