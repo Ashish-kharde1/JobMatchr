@@ -3,7 +3,6 @@ import os
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 from langchain.prompts import ChatPromptTemplate
-from langchain_google_genai import GoogleGenerativeAI
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_community.vectorstores import Chroma
@@ -22,7 +21,23 @@ os.environ["GOOGLE_API_KEY"]
 db = None
 
 # Initialize LLM model
-model = GoogleGenerativeAI(model="gemini-2.0-flash")
+llm = ChatGroq(
+    groq_api_key=groq_api_key,
+    model_name="llama-3.3-70b-versatile"
+)
+
+# Load API keys
+load_dotenv()
+groq_api_key = os.environ["GROQ_API_KEY"]
+os.environ["GOOGLE_API_KEY"]
+
+db = None
+
+# Initialize LLM model
+llm = ChatGroq(
+    groq_api_key=groq_api_key,
+    model_name="llama-3.3-70b-versatile"
+)
 
 # Define prompts
 prompt1 = ChatPromptTemplate.from_template("""
@@ -42,10 +57,18 @@ Your task is to **evaluate** the provided resume against the job description.
 {context}
 
 ### **Response Format**:
-✅ **Overall Match Assessment**: (Provide a summary of alignment)  
-🔹 **Key Strengths**: (List relevant skills, experience, and achievements)  
-⚠️ **Areas for Improvement**: (Mention missing qualifications or weak points)  
-📌 **Final Verdict**: (Would you recommend this candidate for the role? Why or why not?)
+    <br>
+✅ <b>Overall Match Assessment</b>: 
+    (Provide a summary of alignment)  
+    <br>
+🔹 <b>Key Strengths</b>: 
+    (List relevant skills, experience, and achievements)
+    <br>  
+⚠️ <b>Areas for Improvement</b>: 
+    (Mention missing qualifications or weak points)  
+    <br>
+📌 <b>Final Verdict</b>:
+    (Would you recommend this candidate for the role? Why or why not?)
 """)
 
 
@@ -60,14 +83,17 @@ Your task is to **analyze** the resume against the job description, **identify m
 {context}
 
 ### **Response Format**:
-1️⃣ **Missing Keywords**:  
-   - (List missing keywords essential for this role)  
 
-2️⃣ **Why These Keywords Matter**:  
-   - (Explain how these missing keywords impact the resume's ATS score and candidate ranking)  
-
-3️⃣ **Recommendations to Improve ATS Score**:  
-   - (Actionable steps for adding relevant keywords and enhancing resume content)
+    <br>
+1️⃣ <b>Missing Keywords</b>:  
+    (List missing keywords essential for this role)  
+    <br>
+    <br>
+2️⃣ <b>Why These Keywords Matter<b>:  
+    - (Explain how these missing keywords impact the resume's ATS score and candidate ranking)  
+    <br>
+3️⃣ <b>Recommendations to Improve ATS Score</b>:  
+    (Actionable steps for adding relevant keywords and enhancing resume content)
 """)
 
 
@@ -88,12 +114,15 @@ You are an **Applicant Tracking System (ATS) scanner** that calculates **resume-
 {context}
 
 ### **Response Format**:
-📊 **Match Percentage**: (Dynamically calculated value, not static)  
-
-❌ **Missing Keywords**:  
+    <br>
+📊 <b>Match Percentage</b>: 
+    (Dynamically calculated value, not static)  
+    <br>
+    <br>
+❌ <b>Missing Keywords</b>:  
    - (List of essential keywords missing from the resume)  
-
-📌 **Final Recommendations**:  
+    <br>
+📌 <b>Final Recommendations</b>:  
    - (Suggestions for improving the match score)
 """)
 
@@ -126,7 +155,7 @@ def extract_all_data(uploaded_file):
 
 
 def get_response(description, db, prompt):  
-    document_chain = create_stuff_documents_chain(model, prompt)
+    document_chain = create_stuff_documents_chain(llm, prompt)
     retriever = db.as_retriever()
     retrieval_chain = create_retrieval_chain(retriever, document_chain)
 
