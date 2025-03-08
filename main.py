@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 import os
 from dotenv import load_dotenv
-from langchain_groq import ChatGroq
 from langchain_google_genai import GoogleGenerativeAI
 from langchain.prompts import ChatPromptTemplate
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -16,7 +15,6 @@ app = Flask(__name__)
 
 # Load API keys
 load_dotenv()
-groq_api_key = os.environ["GROQ_API_KEY"]
 os.environ["GOOGLE_API_KEY"]
 
 db = None
