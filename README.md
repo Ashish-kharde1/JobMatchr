@@ -28,7 +28,7 @@ JobMatchr is a web application that leverages AI to analyze resumes against job 
 
 1. **Clone the repository**:
     ```bash
-    git clone https://github.com/yourusername/JobMatchr.git
+    git clone https://github.com/Ashish-kharde1/JobMatchr.git
     cd JobMatchr
     ```
 
@@ -46,7 +46,6 @@ JobMatchr is a web application that leverages AI to analyze resumes against job 
 4. **Set up environment variables**:
     Create a `.env` file in the project root and add your API keys:
     ```env
-    GROQ_API_KEY=your_groq_api_key
     GOOGLE_API_KEY=your_google_api_key
     ```
 
