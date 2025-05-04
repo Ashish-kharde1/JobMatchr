@@ -673,7 +673,7 @@
             messageDiv.innerHTML = "Uploading your resume...";
             messageDiv.className = "visible";
             
-            fetch("/upload", { method: "POST", body: formData })
+            fetch("https://ashish-kharde1-jobmatchr.hf.space/upload", { method: "POST", body: formData })
                 .then(response => response.json())
                 .then(data => {
                     if (data.message) {
@@ -699,7 +699,7 @@
     let outputDiv = document.getElementById("output");
     outputDiv.innerHTML = "Analyzing...";
     
-    fetch("/" + endpoint, {
+    fetch("https://ashish-kharde1-jobmatchr.hf.space/" + endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ job_description: jobDescription })
