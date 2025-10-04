@@ -27,7 +27,7 @@ os.environ["GOOGLE_API_KEY"]
 db = None
 
 # Initialize LLM model
-model=GoogleGenerativeAI(model="gemini-2.0-flash")
+model=GoogleGenerativeAI(model="gemini-2.5-flash")
 
 # Define prompts
 prompt1 = ChatPromptTemplate.from_template("""
@@ -125,7 +125,7 @@ def extract_all_data(uploaded_file):
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
     documents = text_splitter.create_documents([text])
 
-    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+    embeddings = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001", transport="grpc")
     db = FAISS.from_documents(documents, embedding=embeddings)
 
     return "Resume successfully processed!"
